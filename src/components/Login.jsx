@@ -1,61 +1,88 @@
-// import React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent page reload
+    const loginData = { username: email, password: password };
+
+    fetch("http://localhost:3000/home", {
+      // Specify the backend's URL
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(loginData),
+    })
+      .then((res) => res.text())
+      .then((data) => {
+        navigate("/home");
+        console.log(data); // Display response from backend
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   return (
-    <div className="container d-flex flex-column align-items-center justify-content-center min-vh-100">
+    <div className="d-flex flex-column align-items-center justify-content-center min-vh-100">
       <form
+        onSubmit={handleSubmit}
         className="w-100"
         style={{ maxWidth: "400px" }}
         action="/"
         method="POST">
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email address
-          </label>
+        {/* <!-- Email input --> */}
+        <div className="form-floating mb-4">
           <input
             type="email"
             className="form-control"
+            placeholder="Email address"
             name="email"
-            aria-describedby="emailHelp"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          <div id="emailHelp" className="form-text">
-            We&apos;ll never share your email with anyone else.
-          </div>
+          <label className="form-label" htmlFor="inputEmail">
+            Email address
+          </label>
         </div>
-        <div className="mb-3">
-          <label htmlFor="exampleInputPassword1" className="form-label">
+
+        {/* <!-- Password input --> */}
+        <div className="form-floating mb-4">
+          <input
+            type="password"
+            className="form-control"
+            placeholder="Password"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <label className="form-label" htmlFor="password">
             Password
           </label>
-          <input type="password" className="form-control" name="password" />
         </div>
-        <div className="mb-3 form-check">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="exampleCheck1"
-          />
-          <label className="form-check-label" htmlFor="exampleCheck1">
-            Remember me
-          </label>
-        </div>
-        <button type="submit" className="btn btn-primary">
-          Submit
+
+        {/* <!-- Submit button --> */}
+        <button type="submit" className="btn btn-primary btn-block mb-4 w-100">
+          Sign in
         </button>
       </form>
 
-      {/* Sign in with Google Button */}
-      {/* <div className="mt-3 w-100" style={{ maxWidth: "400px" }}>
-        <div className="card">
-          <div className="card-body text-center">
-            <a
-              className="btn btn-block btn-light w-100"
-              href="/auth/google"
-              role="button">
-              <i className="fab fa-google"></i> Sign In with Google
-            </a>
-          </div>
-        </div>
-      </div> */}
+      {/* <!-- Register buttons --> */}
+      <div className="text-center">
+        <p>
+          Don&apos;t have account yet? <Link to="/register">Register</Link>
+        </p>
+
+        <p>or sign up with:</p>
+
+        <button type="button" className="btn btn-link btn-floating">
+          <i className="fab fa-google"></i>
+        </button>
+      </div>
     </div>
   );
 };
