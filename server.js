@@ -35,16 +35,16 @@ app.post("/home", async (req, res) => {
 });
 
 
-// app.post("/register", async (req, res) => {
-//     const { username, password } = req.body;
-//     const user = users.find(user => user.username === username && user.password === password);
+app.post("/register", async (req, res) => {
+    const { username, password } = req.body;
+    const user = users.find(user => user.username === username && user.password === password);
 
-//     if (user) {
-//         res.json({ message: "Login successful!", status: "success" });
-//     } else {
-//         res.status(401).json({ message: "Invalid username or password", status: "fail" });
-//     }
-// });
+    if (user) {
+        res.json({ message: "Login successful!", status: "success" });
+    } else {
+        res.status(401).json({ message: "Invalid username or password", status: "fail" });
+    }
+});
 
 //   app.post("/register", async (req, res) => {});
 

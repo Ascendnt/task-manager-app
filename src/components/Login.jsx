@@ -56,6 +56,7 @@ export const Login = () => {
             type="password"
             className="form-control"
             placeholder="Password"
+            autoComplete="off"
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
