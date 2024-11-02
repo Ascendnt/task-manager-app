@@ -23,15 +23,28 @@ const Home = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100">
-      <div className="container" style={{ maxWidth: "600px" }}>
-        <h1 className="text-center mb-4">Task Manager</h1>
-        <Add onAddTask={handleAddTask} />
-        <Edit
-          tasks={tasks}
-          onEditTask={handleEditTask}
-          onDeleteTask={handleDeleteTask}
-        />
+    <div>
+      {/* Navbar */}
+      <nav className="navbar bg-body-tertiary">
+        <div className="container-fluid">
+          <span className="navbar-brand">Task Manager</span>
+          <form className="d-flex">
+            <button className="btn btn-danger" type="submit">
+              Log Out
+            </button>
+          </form>
+        </div>
+      </nav>
+      <div className="d-flex justify-content-center align-items-center min-vh-100">
+        <div className="container" style={{ maxWidth: "600px" }}>
+          <h1 className="text-center mb-4">Task Manager</h1>
+          <Add onAddTask={handleAddTask} />
+          <Edit
+            tasks={tasks}
+            onEditTask={handleEditTask}
+            onDeleteTask={handleDeleteTask}
+          />
+        </div>
       </div>
     </div>
   );
