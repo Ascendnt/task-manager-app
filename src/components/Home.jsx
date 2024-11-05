@@ -1,5 +1,6 @@
 // Home.jsx
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { addTask, editTask, deleteTask } from "./utils/function";
 import Add from "./Add";
 import Edit from "./Edit";
@@ -21,15 +22,27 @@ const Home = () => {
   const handleDeleteTask = (id) => {
     setTasks(deleteTask(tasks, id));
   };
+  const navigate = useNavigate();
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    // Clear any session data or tokens
+    localStorage.clear();
+
+    // Redirect to the login page
+    navigate("/");
+  };
 
   return (
     <div>
-      {/* Navbar */}
       <nav className="navbar bg-body-tertiary">
         <div className="container-fluid">
           <span className="navbar-brand">Task Manager</span>
           <form className="d-flex">
-            <button className="btn btn-danger" type="submit">
+            <button
+              className="btn btn-danger"
+              type="button"
+              onClick={handleLogout}>
               Log Out
             </button>
           </form>

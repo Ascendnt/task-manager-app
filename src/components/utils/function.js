@@ -1,5 +1,3 @@
-// src/utils/taskFunctions.js
-
 // Add a new task
 export const addTask = (text, idCounter) => ({ id: idCounter, text });
 

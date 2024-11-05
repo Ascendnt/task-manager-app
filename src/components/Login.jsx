@@ -6,29 +6,44 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent page reload
     const loginData = { username: email, password: password };
 
-    fetch("http://localhost:3000/home", {
-      // Specify the backend's URL
+    fetch("http://localhost:3000/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(loginData),
     })
-      .then((res) => res.text())
+      .then(async (res) => {
+        const message = await res.text();
+        if (res.ok) {
+          // Status 200-299: Login successful
+          navigate("/home");
+        } else {
+          // Status 400 or other error codes: Login failed
+          return setError(message);
+        }
+      })
       .then((data) => {
-        navigate("/home");
-        console.log(data); // Display response from backend
+        if (data) {
+          console.log(data); // Display error message if login failed
+          alert(data); // Optional: show error alert
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
+        setError("An error occurred. Please try again.");
       });
   };
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center min-vh-100">
+      <div className="w-100" style={{ maxWidth: "400px" }}>
+        <span className="fw-bold fs-1 mb-4 d-block">LOGIN</span>
+      </div>
       <form
         onSubmit={handleSubmit}
         className="w-100"
@@ -65,6 +80,7 @@ export const Login = () => {
             Password
           </label>
         </div>
+        {error && <p style={{ color: "red" }}>{error}</p>}
 
         {/* <!-- Submit button --> */}
         <button type="submit" className="btn btn-primary btn-block mb-4 w-100">
