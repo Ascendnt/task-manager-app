@@ -1,10 +1,23 @@
-// Add a new task
-export const addTask = (text, idCounter) => ({ id: idCounter, text });
+export async function addTask(text) {
+    const response = await fetch("http://localhost:3000/home", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task_list: text }),
+    });
+    return await response.json();
+}
 
-// Edit an existing task
-export const editTask = (tasks, id, newText) =>
-    tasks.map(task => (task.id === id ? { ...task, text: newText } : task));
+export async function editTask(id, newText) {
+    const response = await fetch(`http://localhost:3000/home/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task_list: newText }),
+    });
+    return await response.json();
+}
 
-// Delete a task
-export const deleteTask = (tasks, id) =>
-    tasks.filter(task => task.id !== id);
+export async function deleteTask(id) {
+    await fetch(`http://localhost:3000/home/${id}`, {
+        method: "DELETE",
+    });
+}

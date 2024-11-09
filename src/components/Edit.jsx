@@ -2,10 +2,8 @@
 
 const Edit = ({ tasks, onEditTask, onDeleteTask }) => {
   const handleEdit = (id) => {
-    const newText = prompt(
-      "Edit Task:",
-      tasks.find((task) => task.id === id)?.text
-    );
+    const taskToEdit = tasks.find((task) => task.id === id);
+    const newText = prompt("Edit Task:", taskToEdit?.task_list); // Ensure you access the correct property
     if (newText && newText.trim()) {
       onEditTask(id, newText.trim());
     }
@@ -23,10 +21,12 @@ const Edit = ({ tasks, onEditTask, onDeleteTask }) => {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task) => (
+            {tasks.map((task, index) => (
               <tr key={task.id}>
-                <th scope="row">{task.id}</th>
-                <td>{task.text}</td>
+                {/* Use the unique id as the key */}
+                <th scope="row">{index + 1}</th>
+                <td>{task.task_list}</td>
+                {/* Ensure you're accessing the correct property */}
                 <td>
                   <button
                     className="btn btn-sm btn-warning"

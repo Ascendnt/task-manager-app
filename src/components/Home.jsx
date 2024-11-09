@@ -1,35 +1,63 @@
-// Home.jsx
-import { useState } from "react";
+// Tasks.jsx
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { addTask, editTask, deleteTask } from "./utils/function";
 import Add from "./Add";
 import Edit from "./Edit";
 
-const Home = () => {
+const Tasks = () => {
   const [tasks, setTasks] = useState([]);
-  const [taskIdCounter, setTaskIdCounter] = useState(1);
-
-  const handleAddTask = (text) => {
-    const newTask = addTask(text, taskIdCounter);
-    setTasks([...tasks, newTask]);
-    setTaskIdCounter((prev) => prev + 1);
-  };
-
-  const handleEditTask = (id, newText) => {
-    setTasks(editTask(tasks, id, newText));
-  };
-
-  const handleDeleteTask = (id) => {
-    setTasks(deleteTask(tasks, id));
-  };
   const navigate = useNavigate();
+
+  // Fetch tasks from the API
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/home", {
+          credentials: "include",
+        });
+
+        if (response.status === 401) {
+          // Redirect to "/" if unauthorized
+          navigate("/");
+          return;
+        }
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setTasks(data);
+      } catch (error) {
+        console.error("Error fetching tasks:", error.message);
+      }
+    };
+
+    fetchTasks();
+  }, []);
+
+  const handleAddTask = async (text) => {
+    const newTask = await addTask(text); // Add the task
+    setTasks((prevTasks) => [...prevTasks, newTask]); // Update state with the new task
+  };
+
+  const handleEditTask = async (id, newText) => {
+    const updatedTask = await editTask(id, newText); // Edit the task
+    setTasks(
+      (prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === updatedTask.id ? updatedTask : task
+        ) // Update state with the edited task
+    );
+  };
+
+  const handleDeleteTask = async (id) => {
+    await deleteTask(id); // Delete the task
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id)); // Update state by removing the deleted task
+  };
 
   const handleLogout = (e) => {
     e.preventDefault();
-    // Clear any session data or tokens
     localStorage.clear();
-
-    // Redirect to the login page
     navigate("/");
   };
 
@@ -63,4 +91,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Tasks;
