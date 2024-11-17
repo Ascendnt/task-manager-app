@@ -1,11 +1,11 @@
-// Tasks.jsx
+// Home.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { addTask, editTask, deleteTask } from "./utils/function";
+import { addTask, editTask, deleteTask } from "./function";
 import Add from "./Add";
 import Edit from "./Edit";
 
-const Tasks = () => {
+const Home = () => {
   const [tasks, setTasks] = useState([]);
   const navigate = useNavigate();
 
@@ -17,18 +17,18 @@ const Tasks = () => {
           credentials: "include",
         });
 
-        if (response.status === 401) {
-          // Redirect to "/" if unauthorized
+        if (response.ok) {
+          const data = await response.json();
+          setTasks(data); // Ensure data is an array
+        } else if (response.status === 401) {
+          console.error("Unauthorized access. Redirecting to login.");
           navigate("/");
-          return;
+        } else {
+          console.error(`Error fetching tasks: ${response.status}`);
         }
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        setTasks(data);
       } catch (error) {
-        console.error("Error fetching tasks:", error.message);
+        console.error("Network error:", error);
+        setTasks([]); // Default to an empty array
       }
     };
 
@@ -36,23 +36,20 @@ const Tasks = () => {
   }, []);
 
   const handleAddTask = async (text) => {
-    const newTask = await addTask(text); // Add the task
-    setTasks((prevTasks) => [...prevTasks, newTask]); // Update state with the new task
+    const newTask = await addTask(text);
+    setTasks((prevTasks = []) => [...prevTasks, newTask]); // Default to empty array
   };
 
   const handleEditTask = async (id, newText) => {
-    const updatedTask = await editTask(id, newText); // Edit the task
-    setTasks(
-      (prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === updatedTask.id ? updatedTask : task
-        ) // Update state with the edited task
+    const updatedTask = await editTask(id, newText);
+    setTasks((prevTasks = []) =>
+      prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
     );
   };
 
   const handleDeleteTask = async (id) => {
-    await deleteTask(id); // Delete the task
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id)); // Update state by removing the deleted task
+    await deleteTask(id);
+    setTasks((prevTasks = []) => prevTasks.filter((task) => task.id !== id));
   };
 
   const handleLogout = (e) => {
@@ -91,4 +88,4 @@ const Tasks = () => {
   );
 };
 
-export default Tasks;
+export default Home;

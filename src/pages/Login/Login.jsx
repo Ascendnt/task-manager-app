@@ -8,36 +8,30 @@ export const Login = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page reload
     const loginData = { username: email, password: password };
 
-    fetch("http://localhost:3000/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(loginData),
-      credentials: "include",
-    })
-      .then(async (res) => {
-        const message = await res.text();
-        if (res.ok) {
-          // Status 200-299: Login successful
-          navigate("/home");
-        } else {
-          // Status 400 or other error codes: Login failed
-          return setError(message);
-        }
-      })
-      .then((data) => {
-        if (data) {
-          console.log(data); // Display error message if login failed
-          alert(data); // Optional: show error alert
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        setError("An error occurred. Please try again.");
+    try {
+      const res = await fetch("http://localhost:3000/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginData),
+        credentials: "include",
       });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        navigate("/home");
+      } else {
+        navigate("/");
+        setError(data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("An error occurred. Please try again.");
+    }
   };
 
   return (

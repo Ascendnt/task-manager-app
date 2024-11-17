@@ -14,15 +14,20 @@
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "connect-flash": "^0.1.1",
+    "connect-pg-simple": "^10.0.0",
     "cors": "^2.8.5",
+    "escape-html": "^1.0.3",
     "express": "^4.21.1",
     "express-session": "^1.18.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "pg": "^8.13.1",
+    "pg-cursor": "^2.12.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.27.0"
+    "react-router-dom": "^6.27.0",
+    "vite-plugin-commonjs": "^0.10.3",
+    "vite-plugin-require": "^1.2.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
