@@ -174,7 +174,6 @@ function isAuthenticated(req, res, next) {
 app.get("/home", isAuthenticated, async (req, res) => {
     try {
         const result = await db.query("SELECT * FROM tasks");
-        console.log(result.rows); // Check what is returned here
         res.status(200).json(result.rows); // Always return an array
     } catch (err) {
         console.error(err);

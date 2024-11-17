@@ -89,11 +89,11 @@ export const Login = () => {
           Don&apos;t have account yet? <Link to="/register">Register</Link>
         </p>
 
-        <p>or sign up with:</p>
+        {/* <p>or sign up with:</p>
 
         <button type="button" className="btn btn-link btn-floating">
           <i className="fab fa-google"></i>
-        </button>
+        </button> */}
       </div>
     </div>
   );
