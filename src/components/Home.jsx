@@ -1,7 +1,7 @@
 // Home.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { addTask, editTask, deleteTask } from "./function";
+import { addTask, editTask, deleteTask } from "./utils/function";
 import Add from "./Add";
 import Edit from "./Edit";
 
