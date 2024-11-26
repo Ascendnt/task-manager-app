@@ -8,6 +8,7 @@ First, run the development server:
 # to install node modules
 npm install
 
+# run the app
 npm run dev
 # and
 npm run server
