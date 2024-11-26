@@ -5,6 +5,9 @@ This is a Task Manager application developed using React.js.
 First, run the development server:
 
 ```bash
+# to install node modules
+npm install
+
 npm run dev
 # and
 npm run server
